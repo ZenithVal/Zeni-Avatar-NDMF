@@ -1,7 +1,7 @@
 {
   "name": "io.github.zenithval.zeni-avatar-ndmf",
   "displayName": "ZenithVal ~ Zeni Avatar NDMF",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "unity": "2022.3",
   "description": "A suite of tools for assembling your avatar out of reusable components",
   "vrchatVersion": "2022.3.22f",
