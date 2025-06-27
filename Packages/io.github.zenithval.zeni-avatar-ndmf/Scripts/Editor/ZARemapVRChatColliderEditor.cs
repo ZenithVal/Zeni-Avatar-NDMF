@@ -4,6 +4,7 @@ using ZeniAvatar.Runtime;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor.EditorTools;
 using UnityEngine.UIElements;
+using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 
 namespace ZeniAvatar.Editor
 {
@@ -44,11 +45,10 @@ namespace ZeniAvatar.Editor
 				{
 					EditorGUILayout.HelpBox("Fingers use their parent bone to define position & rotation.", MessageType.Info);
 				}
-
-
-				EditorGUILayout.Space();
-				EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.visualizeGizmo)));
 			}
+
+			EditorGUILayout.Space();
+			EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.visualizeGizmo)));
 
 			serializedObject.ApplyModifiedProperties();
 		}
@@ -62,12 +62,71 @@ namespace ZeniAvatar.Editor
 		{
 			var my = (ZARemapVRChatCollider)target;
 			if (my.remapTargetObject == null) return;
+			descriptor = my.remapTargetObject.GetComponentInParent<VRCAvatarDescriptor>();
 
-			if (!(my.visualizeGizmo && my.customShape)) return;
+			if (!(my.visualizeGizmo)) return;
 
-			var transform = my.remapTargetObject.transform;
-			var radius = my.radius;
-			var height = my.height;
+			ColliderConfig colliderConfig = new ColliderConfig {
+				state = ColliderConfig.State.Custom,
+				isMirrored = false,
+				transform = my.remapTargetObject.transform,
+				radius = my.radius,
+				height = my.height,
+				position = my.position,
+				rotation = my.rotation
+			};
+
+			if (!my.customShape)
+			{
+				switch (my.colliderToRemap)
+				{
+					case VRChatColliders.Head:
+						colliderConfig = descriptor.collider_head;
+						break;
+					case VRChatColliders.Torso:
+						colliderConfig = descriptor.collider_torso;
+						break;
+					case VRChatColliders.HandLeft:
+						colliderConfig = descriptor.collider_handL;
+						break;
+					case VRChatColliders.HandRight:
+						colliderConfig = descriptor.collider_handR;
+						break;
+					case VRChatColliders.FingerIndexLeft:
+						colliderConfig = descriptor.collider_fingerIndexL;
+						break;
+					case VRChatColliders.FingerIndexRight:
+						colliderConfig = descriptor.collider_fingerIndexR;
+						break;
+					case VRChatColliders.FingerMiddleLeft:
+						colliderConfig = descriptor.collider_fingerMiddleL;
+						break;
+					case VRChatColliders.FingerMiddleRight:
+						colliderConfig = descriptor.collider_fingerMiddleR;
+						break;
+					case VRChatColliders.FingerRingLeft:
+						colliderConfig = descriptor.collider_fingerRingL;
+						break;
+					case VRChatColliders.FingerRingRight:
+						colliderConfig = descriptor.collider_fingerRingR;
+						break;
+					case VRChatColliders.FootLeft:
+						colliderConfig = descriptor.collider_footL;
+						break;
+					case VRChatColliders.FootRight:
+						colliderConfig = descriptor.collider_footR;
+						break;
+					default:
+						break;
+				}
+				colliderConfig.transform = my.remapTargetObject.transform;
+			}
+
+			var transform = colliderConfig.transform;
+			var radius = colliderConfig.radius;
+			var height = colliderConfig.height;
+			var position = colliderConfig.position;
+			var rotation = colliderConfig.rotation;
 
 			var scale = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
 			var clampedRadius = Mathf.Min(radius * scale, 2.5f * 0.5f) / scale;
@@ -94,8 +153,8 @@ namespace ZeniAvatar.Editor
 			}
 			else
 			{
-				var globalPos = transform.TransformPoint(my.position);
-				var globalRot = transform.rotation * my.rotation;
+				var globalPos = transform.TransformPoint(position);
+				var globalRot = transform.rotation * rotation;
 				HandlesUtil.DrawWireCapsule(globalPos, globalRot, clampedHeight * scale, clampedRadius * scale);
 			}
 		}
