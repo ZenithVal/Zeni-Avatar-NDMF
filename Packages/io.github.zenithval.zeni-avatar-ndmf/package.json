@@ -1,7 +1,7 @@
 {
   "name": "io.github.zenithval.zeni-avatar-ndmf",
   "displayName": "ZenithVal ~ Zeni Avatar NDMF",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "unity": "2022.3",
   "description": "A suite of tools for assembling your avatar out of reusable components",
   "vrchatVersion": "2022.3.22f",
@@ -12,8 +12,8 @@
     "com.vrchat.avatars": ">=3.7.6",
     "nadena.dev.modular-avatar": ">=1.12.5 <2.0.0-a"
   },
-  "url": "",
-  "documentationUrl": "",
-  "changelogUrl": "",
+  "url": "https://github.com/ZenithVal",
+  "documentationUrl": "https://github.com/ZenithVal/Zeni-Avatar-NDMF",
+  "changelogUrl": "https://github.com/ZenithVal/Zeni-Avatar-NDMF/releases",
   "license": "MIT"
 }
