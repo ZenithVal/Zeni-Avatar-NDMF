@@ -60,6 +60,14 @@ namespace ZeniAvatar.Runtime
 		public AvatarObjectReference remapTarget = new AvatarObjectReference();
 		public GameObject remapTargetObject => remapTarget.Get(this);
 
+		// Customize Shape
+		public bool customShape = false;
+		public bool visualizeGizmo = true;
+		public float radius = 0.0f;
+		public float height = 0.0f;
+		public Vector3 position = Vector3.zero;
+		public Quaternion rotation = Quaternion.identity;
+
 		//These can probably be removed.
 		private string prefix = "";
 		private string suffix = "";
