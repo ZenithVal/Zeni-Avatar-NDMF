@@ -61,7 +61,7 @@ namespace ZeniAvatar.Editor
 		void DrawCollider()
 		{
 			var my = (ZARemapVRChatCollider)target;
-			if (my.remapTarget == null) return;
+			if (my.remapTargetObject == null) return;
 
 			if (!(my.visualizeGizmo && my.customShape)) return;
 
@@ -99,5 +99,6 @@ namespace ZeniAvatar.Editor
 				HandlesUtil.DrawWireCapsule(globalPos, globalRot, clampedHeight * scale, clampedRadius * scale);
 			}
 		}
+
 	}
 }

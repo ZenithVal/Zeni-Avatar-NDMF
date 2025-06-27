@@ -63,8 +63,8 @@ namespace ZeniAvatar.Runtime
 		// Customize Shape
 		public bool customShape = false;
 		public bool visualizeGizmo = true;
-		public float radius = 0.0f;
-		public float height = 0.0f;
+		public float radius = 0.05f;
+		public float height = 0.2f;
 		public Vector3 position = Vector3.zero;
 		public Quaternion rotation = Quaternion.identity;
 
@@ -110,6 +110,10 @@ namespace ZeniAvatar.Runtime
 		protected override void OnValidate()
 		{
 			base.OnValidate();
+			if (remapTargetObject == null)
+			{
+				remapTarget.Set(gameObject);
+			}
 		}
 
 		protected override void OnDestroy()
