@@ -46,7 +46,6 @@ namespace ZeniAvatar.Runtime
 	}
 
 	[ExecuteInEditMode]
-	[DisallowMultipleComponent]
 	[AddComponentMenu("ZA/ZA Remap VRChat Collider")]
 	public class ZARemapVRChatCollider : AvatarTagComponent
 	{
@@ -110,10 +109,11 @@ namespace ZeniAvatar.Runtime
 		protected override void OnValidate()
 		{
 			base.OnValidate();
+			/*//Breaks prefabs. Need to learn why. Removing for now.
 			if (remapTargetObject == null)
 			{
 				remapTarget.Set(gameObject);
-			}
+			}*/
 		}
 
 		protected override void OnDestroy()

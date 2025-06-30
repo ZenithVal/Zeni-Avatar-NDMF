@@ -11,17 +11,9 @@ namespace ZeniAvatar.Editor
 	[CustomEditor(typeof(ZARemapVRChatCollider))]
 	public class ZARemapVRChatColliderEditor : UnityEditor.Editor
 	{
-		VRCAvatarDescriptor descriptor;
-
 		public override void OnInspectorGUI()
 		{
 			var my = (ZARemapVRChatCollider)target;
-			if (descriptor == null)
-			{
-				descriptor = my.transform.GetComponentInParent<VRCAvatarDescriptor>();
-				EditorGUILayout.HelpBox("No VRCAvatarDescriptor found in parent hierarchy.", MessageType.Warning);
-				return;
-			}
 
 			EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.colliderToRemap)));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.remapTarget)));
@@ -62,7 +54,9 @@ namespace ZeniAvatar.Editor
 		{
 			var my = (ZARemapVRChatCollider)target;
 			if (my.remapTargetObject == null) return;
-			descriptor = my.remapTargetObject.GetComponentInParent<VRCAvatarDescriptor>();
+			var descriptor = my.remapTargetObject.GetComponentInParent<VRCAvatarDescriptor>();
+
+			if (descriptor == null) return;
 
 			if (!(my.visualizeGizmo)) return;
 
