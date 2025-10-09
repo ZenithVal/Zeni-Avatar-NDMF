@@ -59,6 +59,9 @@ namespace ZeniAvatar.Runtime
 		public AvatarObjectReference remapTarget = new AvatarObjectReference();
 		public GameObject remapTargetObject => remapTarget.Get(this);
 
+		// public bool manualRemap
+		public bool manualRemap = false;
+
 		// Customize Shape
 		public bool customShape = false;
 		public bool visualizeGizmo = true;

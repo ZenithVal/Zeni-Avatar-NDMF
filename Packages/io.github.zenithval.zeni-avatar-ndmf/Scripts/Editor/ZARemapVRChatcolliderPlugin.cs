@@ -1,10 +1,12 @@
 using Object = UnityEngine.Object;
+using System.Collections.Generic;
 using ZeniAvatar.Runtime;
 using ZeniAvatar.Editor;
 using nadena.dev.ndmf;
 using VRC.SDK3.Avatars.Components;
 using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 using System;
+using UnityEngine;
 using UnityEditor.Build.Reporting;
 
 [assembly: ExportsPlugin(typeof(ZARemapVRChatColliderPlugin))]
@@ -33,23 +35,108 @@ namespace ZeniAvatar.Editor
 		{
 			var remapColliders = ctx.AvatarRootTransform.GetComponentsInChildren<ZARemapVRChatCollider>(true);
 			if (remapColliders.Length == 0) return;
-			//None found on avatar, skip
 
-			foreach (var my in remapColliders) 
+			//Reording so manual remaps run before automatic.
+			Array.Sort(remapColliders, (a, b) =>
 			{
+				if (a.manualRemap && !b.manualRemap) return -1;
+				if (!a.manualRemap && b.manualRemap) return 1;
+				return 0;
+			});
+
+			//Keep track of used colliders
+			var usedColliders = new List<VRChatColliders>();
+
+			var ColliderIndex = 0;
+			foreach (var my in remapColliders)
+			{
+				ColliderIndex++;
+				VRChatColliders targetCollider;
+				var newColliderConfig = new ColliderConfig
+				{
+					state = ColliderConfig.State.Custom,
+					isMirrored = false,
+					transform = my.remapTargetObject.transform,
+					radius = my.radius,
+					height = my.height,
+					position = my.position,
+					rotation = my.rotation,
+				};
+
+				if (my.manualRemap)
+				{
+					if (usedColliders.Contains(my.colliderToRemap))
+					{
+						//Should report an error here, but it doesn't need to be fatal. The last one will just take priority.
+						//(I have setups with multiple manual colliders and I use execution order)
+					}
+					targetCollider = my.colliderToRemap;
+				}
+				else
+				{
+					//Find the first unused global collider. Left Right, Ring, Middle, Little, Index
+					if (!usedColliders.Contains(VRChatColliders.FingerRingLeft)){
+						targetCollider = VRChatColliders.FingerIndexLeft;
+					}
+					else if (!usedColliders.Contains(VRChatColliders.FingerRingRight)){
+						targetCollider = VRChatColliders.FingerIndexRight;
+					}
+					else if (!usedColliders.Contains(VRChatColliders.FingerMiddleLeft)){
+						targetCollider = VRChatColliders.FingerMiddleLeft;
+					}
+					else if (!usedColliders.Contains(VRChatColliders.FingerMiddleRight)){
+						targetCollider = VRChatColliders.FingerMiddleRight;
+					}
+					else if (!usedColliders.Contains(VRChatColliders.FingerLittleLeft))
+					{
+						targetCollider = VRChatColliders.FingerRingLeft;
+					}
+					else if (!usedColliders.Contains(VRChatColliders.FingerLittleRight)){
+						targetCollider = VRChatColliders.FingerRingRight;
+					}
+					//Ideally we should reccomend AGAINST yoinking the index finger since this could result in broken behavior when world dynamics drops.
+					//Maybe log this as a warning or just don't include them in automatic?
+					else if (!usedColliders.Contains(VRChatColliders.FingerIndexLeft)){
+						targetCollider = VRChatColliders.FingerLittleLeft;
+					}
+					else if (!usedColliders.Contains(VRChatColliders.FingerIndexRight)){
+						targetCollider = VRChatColliders.FingerLittleRight;
+					}
+					else{
+						//Should report a build error here. Could be non fatal since we ran out of automatic colliders to use.
+						//Something like...
+						//$"[ZARemapVRChatColliderPlugin] Collider {my.colliderToRemap} already used"
+						continue;
+					}
+				}
+				usedColliders.Add(targetCollider);
+				
 				if (my.customShape)
 				{
-					ColliderConfig newColliderConfig = new ColliderConfig {
-						state = ColliderConfig.State.Custom,
-						isMirrored = false,
-						transform = my.remapTargetObject.transform,
-						radius = my.radius,
-						height = my.height,
-						position = my.position,
-						rotation = my.rotation,
-					};
+					//Finger bones are special
+					bool isFinger =
+						!(targetCollider == VRChatColliders.Head ||
+						  targetCollider == VRChatColliders.Torso ||
+						  targetCollider == VRChatColliders.HandLeft || targetCollider == VRChatColliders.HandRight ||
+						  targetCollider == VRChatColliders.FootLeft || targetCollider == VRChatColliders.FootRight);
+					if (isFinger)
+					{
+						//Create an empty inside the target bone with the custom position and rotation
+						var ColliderRoot = new GameObject($"ZA_ColliderRoot_{targetCollider}_{ColliderIndex}");
+						ColliderRoot.transform.SetParent(my.remapTargetObject.transform, false);
+						ColliderRoot.transform.localPosition = my.position;
+						ColliderRoot.transform.localRotation = my.rotation;
 
-					switch (my.colliderToRemap)
+						//Offset the child bone to center it
+						var ColliderTarget = new GameObject($"ZA_ColliderTarget_{targetCollider}_{ColliderIndex}");
+						ColliderTarget.transform.SetParent(ColliderRoot.transform, false);
+						ColliderTarget.transform.localPosition = new Vector3(0, my.height * 0.5f, 0);
+						newColliderConfig.transform = ColliderTarget.transform;
+						newColliderConfig.position = Vector3.zero;
+						newColliderConfig.rotation = Quaternion.identity;
+					}
+
+					switch (targetCollider)
 					{
 						case VRChatColliders.Head:
 							ctx.AvatarDescriptor.collider_head = newColliderConfig;
@@ -109,10 +196,10 @@ namespace ZeniAvatar.Editor
 				}
 				else
 				{
-					var newTransform = my.remapTargetObject.transform;
 					var newState = ColliderConfig.State.Custom;
+					var newTransform = my.remapTargetObject.transform;
 
-					switch (my.colliderToRemap)
+					switch (targetCollider)
 					{
 						case VRChatColliders.Head:
 							ctx.AvatarDescriptor.collider_head.transform = newTransform;
