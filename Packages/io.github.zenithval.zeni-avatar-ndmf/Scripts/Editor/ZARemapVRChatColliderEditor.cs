@@ -20,6 +20,10 @@ namespace ZeniAvatar.Editor
 			{
 				EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.colliderToRemap)));
 			}
+			else
+			{
+				EditorGUILayout.HelpBox("If manual remap is disabled, ZA remap will automatically choose an available finger collider.", MessageType.Info);
+			}
 			//It'd be nice to show this as a disabled/locked field and automatially populate it with what collider it'll end up as.
 			//Could also show a warning if it's gonna end up as index finger.
 
@@ -32,18 +36,8 @@ namespace ZeniAvatar.Editor
 				EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.radius)));
 				EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.height)));
 
-				if (my.colliderToRemap == VRChatColliders.Head ||
-					my.colliderToRemap == VRChatColliders.Torso ||
-					my.colliderToRemap == VRChatColliders.HandLeft || my.colliderToRemap == VRChatColliders.HandRight ||
-					my.colliderToRemap == VRChatColliders.FootLeft || my.colliderToRemap == VRChatColliders.FootRight)
-				{
-					EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.position)));
-					EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.rotation)));
-				}
-				else
-				{
-					EditorGUILayout.HelpBox("Fingers use their parent bone to define position & rotation.", MessageType.Info);
-				}
+				EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.position)));
+				EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.rotation)));
 			}
 
 			EditorGUILayout.Space();
@@ -138,32 +132,6 @@ namespace ZeniAvatar.Editor
 			var globalPos = transform.TransformPoint(position);
 			var globalRot = transform.rotation * rotation;
 			HandlesUtil.DrawWireCapsule(globalPos, globalRot, clampedHeight * scale, clampedRadius * scale);
-
-			//==Legacy method for fingers==
-			// bool isFinger =
-			// 	!(my.colliderToRemap == VRChatColliders.Head ||
-			// 	  my.colliderToRemap == VRChatColliders.Torso ||
-			// 	  my.colliderToRemap == VRChatColliders.HandLeft || my.colliderToRemap == VRChatColliders.HandRight ||
-			// 	  my.colliderToRemap == VRChatColliders.FootLeft || my.colliderToRemap == VRChatColliders.FootRight);
-			// if (isFinger && transform.parent != null)
-			// {
-			// 	var begin = transform.parent.position;
-			// 	var end = transform.position;
-
-			// 	var direction = (end - begin).normalized;
-			// 	var globalHeight = height * scale;
-			// 	end = begin + direction * globalHeight;
-			// 	var center = (begin + end) * 0.5f;
-			// 	var globalRadius = clampedRadius * scale;
-
-			// 	HandlesUtil.DrawWireCapsule(center, Quaternion.FromToRotation(Vector3.up, direction), globalHeight, globalRadius);
-			// }
-			// else
-			// {
-			// 	var globalPos = transform.TransformPoint(position);
-			// 	var globalRot = transform.rotation * rotation;
-			// 	HandlesUtil.DrawWireCapsule(globalPos, globalRot, clampedHeight * scale, clampedRadius * scale);
-			// }
 		}
 
 	}

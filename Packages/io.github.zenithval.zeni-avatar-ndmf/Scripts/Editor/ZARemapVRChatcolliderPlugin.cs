@@ -76,10 +76,10 @@ namespace ZeniAvatar.Editor
 				{
 					//Find the first unused global collider. Left Right, Ring, Middle, Little, Index
 					if (!usedColliders.Contains(VRChatColliders.FingerRingLeft)){
-						targetCollider = VRChatColliders.FingerIndexLeft;
+						targetCollider = VRChatColliders.FingerRingLeft;
 					}
 					else if (!usedColliders.Contains(VRChatColliders.FingerRingRight)){
-						targetCollider = VRChatColliders.FingerIndexRight;
+						targetCollider = VRChatColliders.FingerRingRight;
 					}
 					else if (!usedColliders.Contains(VRChatColliders.FingerMiddleLeft)){
 						targetCollider = VRChatColliders.FingerMiddleLeft;
@@ -89,18 +89,18 @@ namespace ZeniAvatar.Editor
 					}
 					else if (!usedColliders.Contains(VRChatColliders.FingerLittleLeft))
 					{
-						targetCollider = VRChatColliders.FingerRingLeft;
+						targetCollider = VRChatColliders.FingerLittleLeft;
 					}
 					else if (!usedColliders.Contains(VRChatColliders.FingerLittleRight)){
-						targetCollider = VRChatColliders.FingerRingRight;
+						targetCollider = VRChatColliders.FingerLittleRight;
 					}
 					//Ideally we should reccomend AGAINST yoinking the index finger since this could result in broken behavior when world dynamics drops.
 					//Maybe log this as a warning or just don't include them in automatic?
 					else if (!usedColliders.Contains(VRChatColliders.FingerIndexLeft)){
-						targetCollider = VRChatColliders.FingerLittleLeft;
+						targetCollider = VRChatColliders.FingerIndexLeft;
 					}
 					else if (!usedColliders.Contains(VRChatColliders.FingerIndexRight)){
-						targetCollider = VRChatColliders.FingerLittleRight;
+						targetCollider = VRChatColliders.FingerIndexRight;
 					}
 					else{
 						//Should report a build error here. Could be non fatal since we ran out of automatic colliders to use.
