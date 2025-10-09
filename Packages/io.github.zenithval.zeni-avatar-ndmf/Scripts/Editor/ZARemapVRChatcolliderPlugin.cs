@@ -124,13 +124,15 @@ namespace ZeniAvatar.Editor
 						//Create an empty inside the target bone with the custom position and rotation
 						var ColliderRoot = new GameObject($"ZA_ColliderRoot_{targetCollider}_{ColliderIndex}");
 						ColliderRoot.transform.SetParent(my.remapTargetObject.transform, false);
-						ColliderRoot.transform.localPosition = my.position;
+						//position before offsets should be height*-0.5 on y axis
+						ColliderRoot.transform.localPosition = new Vector3(my.position.x, (my.height * -0.5f) + my.position.y, my.position.z);
 						ColliderRoot.transform.localRotation = my.rotation;
 
 						//Offset the child bone to center it
 						var ColliderTarget = new GameObject($"ZA_ColliderTarget_{targetCollider}_{ColliderIndex}");
 						ColliderTarget.transform.SetParent(ColliderRoot.transform, false);
-						ColliderTarget.transform.localPosition = new Vector3(0, my.height * 0.5f, 0);
+						//Always setting y to 0.1 so the collider is in the correct orientation.
+						ColliderTarget.transform.localPosition = new Vector3(0, 0.1f, 0);
 						newColliderConfig.transform = ColliderTarget.transform;
 						newColliderConfig.position = Vector3.zero;
 						newColliderConfig.rotation = Quaternion.identity;

@@ -72,7 +72,7 @@ namespace ZeniAvatar.Editor
 				rotation = my.rotation
 			};
 
-			//If it's not a a custom shape we just pull from the original config.
+			//If it's not a a custom shape we pull from the original config.
 			if (!my.customShape)
 			{
 				switch (my.colliderToRemap)
@@ -105,6 +105,12 @@ namespace ZeniAvatar.Editor
 						colliderConfig = descriptor.collider_fingerRingL;
 						break;
 					case VRChatColliders.FingerRingRight:
+						colliderConfig = descriptor.collider_fingerRingR;
+						break;
+					case VRChatColliders.FingerLittleLeft:
+						colliderConfig = descriptor.collider_fingerRingL;
+						break;
+					case VRChatColliders.FingerLittleRight:
 						colliderConfig = descriptor.collider_fingerRingR;
 						break;
 					case VRChatColliders.FootLeft:
