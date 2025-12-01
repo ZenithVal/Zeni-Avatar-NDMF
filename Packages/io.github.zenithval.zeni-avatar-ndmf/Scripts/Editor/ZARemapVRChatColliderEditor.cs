@@ -15,6 +15,24 @@ namespace ZeniAvatar.Editor
 		{
 			var my = (ZARemapVRChatCollider)target;
 
+			//button to convert to MA component
+			if (GUILayout.Button("Convert to Modular Avatar"))
+			{
+				var maComponent = Undo.AddComponent<nadena.dev.modular_avatar.core.ModularAvatarGlobalCollider>(my.gameObject);
+				maComponent.ManualRemap = my.manualRemap;
+				maComponent.ColliderToHijack = (nadena.dev.modular_avatar.core.GlobalCollider)my.colliderToRemap;
+				maComponent.RootTransform = my.remapTargetObject.transform;
+				maComponent.CopyHijackedShape = !my.customShape;
+				maComponent.Radius = my.radius;
+				maComponent.Height = my.height;
+				maComponent.Position = my.position;
+				maComponent.Rotation = my.rotation;
+				maComponent.VisualizeGizmo = my.visualizeGizmo;
+
+				Undo.DestroyObjectImmediate(my);
+				return;
+			}
+
 			EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.manualRemap)));
 			if (my.manualRemap)
 			{
