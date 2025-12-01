@@ -1,4 +1,4 @@
-# Zeni Avatar NDMF
+# Zeni Avatar NDMF (ZA)
 
 A collection of niche, non-destructive for avatar creation workflows, mostly for VRChat.  
 Designed to be used alongside [Modular Avatar](https://github.com/bdunderscore/modular-avatar).  
@@ -10,17 +10,6 @@ Designed to be used alongside [Modular Avatar](https://github.com/bdunderscore/m
 ---
 
 ## ✨ Components
-
-### 🟦 ZA Remap VRChat Collider
-A tool to remap avatar descriptor colliders to target bones and define custom shapes for them. 
-
-**Example Use cases:**  
-- Making a modular prefab for setting up your standard humanoid Colliders.
-- Reassigning colliders for weapon/props to interact with PhysBones. (Melee, guns, ect)
-- Moving the hand collider to the head, allowing biting by holding trigger.
-  - (Example Prefab soon™ toggle supported)
-
----
 
 ### 🟦 ZA Set View Position
 A component to set the avatar descriptor view position based on the position of a GameObject in the world.  
@@ -37,6 +26,25 @@ Lorum Ipsum text here
  - Bullet
 
 ---
+
+
+## Deprecated Components
+Removed from ZAN for one reason or another.
+
+### 🟦 ZA Remap VRChat Collider
+A tool to remap avatar descriptor colliders to target bones and define custom shapes for them
+
+**Example Use cases:**  
+- Making a modular prefab for setting up your standard humanoid Colliders.
+- Reassigning colliders for weapon/props to interact with PhysBones. (Melee, guns, ect)
+- Moving the hand collider to the head, allowing biting by holding trigger.
+  - (Example Prefab soon™ toggle supported)
+</details>
+
+**Fate:** Expanded and merged into MA as [Global Collider.](https://modular-avatar.nadena.dev/docs/reference/global-collider) ZA Includes a converter but functionality has been stripped.
+
+---
+
 
 ## Credits
 This project was built by learning from:  

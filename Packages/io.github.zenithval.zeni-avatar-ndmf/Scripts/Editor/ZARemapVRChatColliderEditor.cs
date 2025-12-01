@@ -15,8 +15,10 @@ namespace ZeniAvatar.Editor
 		{
 			var my = (ZARemapVRChatCollider)target;
 
+			EditorGUILayout.HelpBox("ZA Remap VRChat collider has been merged into Modular Avatar as Global Collider.\nYou should convert this component (configuration is preserved)", MessageType.Error);
+
 			//button to convert to MA component
-			if (GUILayout.Button("Convert to Modular Avatar"))
+			if (GUILayout.Button("Convert to Modular Avatar Global Collider"))
 			{
 				var maComponent = Undo.AddComponent<nadena.dev.modular_avatar.core.ModularAvatarGlobalCollider>(my.gameObject);
 				maComponent.ManualRemap = my.manualRemap;
@@ -33,6 +35,10 @@ namespace ZeniAvatar.Editor
 				return;
 			}
 
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+
 			EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.manualRemap)));
 			if (my.manualRemap)
 			{
@@ -40,10 +46,8 @@ namespace ZeniAvatar.Editor
 			}
 			else
 			{
-				EditorGUILayout.HelpBox("If manual remap is disabled, ZA remap will automatically choose an available finger collider.", MessageType.Info);
+				// EditorGUILayout.HelpBox("If manual remap is disabled, ZA remap will automatically choose an available finger collider.", MessageType.Info);
 			}
-			//It'd be nice to show this as a disabled/locked field and automatially populate it with what collider it'll end up as.
-			//Could also show a warning if it's gonna end up as index finger.
 
 			EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(ZARemapVRChatCollider.remapTarget)));
 
@@ -63,6 +67,7 @@ namespace ZeniAvatar.Editor
 
 			serializedObject.ApplyModifiedProperties();
 		}
+
 
 		public void OnSceneGUI()
 		{
