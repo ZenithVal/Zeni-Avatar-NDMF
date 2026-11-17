@@ -1,4 +1,5 @@
 using nadena.dev.ndmf;
+using nadena.dev.ndmf.vrchat;
 using ZeniAvatar.Editor;
 using ZeniAvatar.Runtime;
 using UnityEngine;
@@ -33,7 +34,7 @@ namespace ZeniAvatar.Editor
 
 					Debug.Log($"({GetType().Name}) Setting view position to ({position.x:0.000}, {position.y:0.000}, {position.z:0.000}) m");
 
-					ctx.AvatarDescriptor.ViewPosition = position;
+					ctx.VRChatAvatarDescriptor().ViewPosition = position;
 
 					Object.DestroyImmediate(my); 
 				});
