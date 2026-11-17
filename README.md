@@ -20,6 +20,11 @@ A component to set the avatar descriptor view position based on the position of 
 
 ---
 
+### 🟦 ZA Configure Descriptor
+For workflows where the root of the avatar isnt a prefab this allows modularizing the descriptor.
+
+---
+
 ### 🟦 ZA Placeholder
 Lorum Ipsum text here
  - Bullet
