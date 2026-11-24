@@ -42,6 +42,7 @@ namespace ZeniAvatar.Editor
 					targetDesc.VisemeSkinnedMesh = sourceDesc.VisemeSkinnedMesh;
 
 					//Eyes
+					targetDesc.enableEyeLook = sourceDesc.enableEyeLook;
 					targetDesc.customEyeLookSettings = sourceDesc.customEyeLookSettings;
 
 					//Facetracking
@@ -56,6 +57,10 @@ namespace ZeniAvatar.Editor
 					//Misc
 					targetDesc.autoFootsteps = sourceDesc.autoFootsteps;
 					targetDesc.autoLocomotion = sourceDesc.autoLocomotion;
+
+					//expression (menus)
+					targetDesc.expressionsMenu = sourceDesc.expressionsMenu;
+					targetDesc.expressionParameters = sourceDesc.expressionParameters;
 
 					Object.DestroyImmediate(sourceDesc.gameObject);
 					Object.DestroyImmediate(my); 
